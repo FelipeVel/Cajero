@@ -17,15 +17,14 @@ public class Cliente {
 
 	public Cliente(String nombreTarjeta) throws SQLException{
             this.m_Cajero = new Cajero(this);
-            System.out.println("Cajero creado");
+            System.out.println("Cajero vinculado");
             crearTarjeta(nombreTarjeta);
-            System.out.println("Tarjeta creada");
+            System.out.println("Tarjeta local creada");
             m_Cajero.setTarjeta(tarjeta);
             System.out.println("Tarjeta vinculada con cajero");
             ResultSet rs = m_Cajero.llenarCliente();
             rs.next();
             this.nombreCliente=rs.getString("Nombre");
-            System.out.println("Nombre: "+nombreCliente);
             this.apellidoCliente=rs.getString("Apellido");
             this.direccionCliente=rs.getString("Direccion");
             this.telefonoCliente=rs.getString("Telefono");
@@ -33,7 +32,9 @@ public class Cliente {
             rs=m_Cajero.llenarCuenta();
             rs.next();
             this.cuenta=new Cuenta(rs.getString("idCuenta"),rs.getInt("saldo"),tarjeta);
-            System.out.println("Cliente creado");
+            tarjeta.setCuenta(cuenta);
+            m_Cajero.setCuenta(cuenta);
+            System.out.println("Cliente local creado");
 	}
         
         public String getId(){
@@ -48,16 +49,19 @@ public class Cliente {
             return nombreCliente;
         }
         
+        public Cajero getCajero(){
+            return m_Cajero;
+        }
+        
         private void crearTarjeta(String nombreTarjeta){
-            System.out.println("Creando tarjeta");
+            System.out.println("Asociando tarjeta");
             BufferedReader br = null;
             try {
                br = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\NetBeansProjects\\Cajero\\src\\Logica\\Recursos\\"+nombreTarjeta+".txt"));
                this.idCliente = br.readLine();
                String serial = br.readLine();
                String clave = br.readLine();
-                System.out.println("clave: "+clave);
-               this.tarjeta= new TarjetaDebito(serial,clave,m_Cajero,cuenta);
+               this.tarjeta= new TarjetaDebito(serial,clave,m_Cajero);
             }
             catch (FileNotFoundException e) {
                 System.out.println("Error: Fichero no encontrado");
@@ -80,8 +84,7 @@ public class Cliente {
         }
         
         public void seleccionarOperacion(String operacion, int valor){
-            Transaccion transaccion = new Transaccion(operacion,valor,m_Cajero);
-            transaccion.ejecutarTransaccion();
+            new Transaccion(operacion,valor,m_Cajero);
         }
         
         public boolean ingresarClave(String clave){

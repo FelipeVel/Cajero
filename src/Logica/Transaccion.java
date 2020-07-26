@@ -1,11 +1,11 @@
 package Logica;
 
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 public class Transaccion {
 
 	private String fechaTransaccion;
-	private String idCajero;
 	public Cajero m_Cajero;
 	private String tipoTransaccion;
 	private int valorTransaccion;
@@ -14,8 +14,8 @@ public class Transaccion {
             this.tipoTransaccion=operacion;
             this.valorTransaccion=valor;
             this.m_Cajero=m_Cajero;
-            this.idCajero=m_Cajero.getId();
             fechaTransaccion = new Date().toString();
+            this.ejecutarTransaccion();
 	}
         
         public int getValor(){
@@ -23,20 +23,21 @@ public class Transaccion {
         }
         
         public void ejecutarTransaccion(){
-            if (tipoTransaccion.equals("ingreso"))
+            if (tipoTransaccion.equals("consignar"))
                 ingresarDinero();
-            else if(tipoTransaccion.equals("retiro"))
+            else if(tipoTransaccion.equals("retirar"))
                 retirarDinero();
-            registrarTransaccion();
+            if(!m_Cajero.solicitarTransaccion(valorTransaccion)){
+                JOptionPane.showMessageDialog(null, "Saldo insuficiente", "Error", 0);
+                return;
+            }                
+            System.out.println("Valor de transaccion: "+valorTransaccion);
+            m_Cajero.realizarTransaccion(this);
         }
         
 	private void ingresarDinero(){
             if(m_Cajero.solicitarTransaccion(valorTransaccion))
                 m_Cajero.actualizarSaldo(valorTransaccion);
-	}
-
-	public void registrarTransaccion(){
-            m_Cajero.realizarTransaccion(this);
 	}
 
 	private void retirarDinero(){

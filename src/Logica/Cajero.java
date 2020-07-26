@@ -5,9 +5,9 @@ import Vista.Recibo;
 
 public class Cajero {
 
-	private int capacidadDesignada;
+	private int capacidadDesignada=5000000;
 	private String idCajero;
-	private double saldoCajero;
+	private int saldoCajero=3500000;
         private TarjetaDebito tarjeta;
         Banco banco;
         int contador=0;
@@ -17,7 +17,6 @@ public class Cajero {
 	public Cajero(Cliente cliente) throws SQLException{
             this.banco= new Banco();
             this.cliente=cliente;
-            this.cuenta=cliente.getCuenta();
 	}
         
         public Cliente getCliente(){
@@ -28,6 +27,10 @@ public class Cajero {
             this.tarjeta=tarjeta;
             banco.setClienteId(cliente.getId());
             tarjeta.validarSerial();
+        }
+        
+        public void setCuenta(Cuenta cuenta){
+            this.cuenta=cliente.getCuenta();
         }
         
         public ResultSet llenarCliente(){
@@ -57,7 +60,9 @@ public class Cajero {
         }
         
         public boolean solicitarTransaccion(int valor){
-            return validarSaldoCajero(valor) && tarjeta.getCuenta().aprobarTransaccion(valor,banco);
+            boolean saldo = validarSaldoCajero(valor);
+            System.out.println("solicitarTransaccion: "+(saldo && tarjeta.getCuenta().aprobarTransaccion(valor)));
+            return saldo && tarjeta.getCuenta().aprobarTransaccion(valor);
         }
         
         public String getId(){
@@ -69,11 +74,12 @@ public class Cajero {
         }
 
 	public void imprimirReciboTransaccion(Transaccion transaccion, Cliente cliente, Banco banco){
-            new Recibo();
+            //new Recibo();
 	}
 
 	public void realizarTransaccion(Transaccion transaccion){
-            banco.actualizarSaldoCuenta(cuenta.getId(),transaccion.getValor());
+            int valor=cuenta.getSaldo()+transaccion.getValor();
+            banco.actualizarSaldoCuenta(cuenta.getId(),valor);
             cuenta.actualizarDinero(transaccion.getValor());
             saldoCajero+=transaccion.getValor();
             imprimirReciboTransaccion(transaccion, cliente, banco);

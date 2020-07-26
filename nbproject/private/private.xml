@@ -3,13 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/Banco.java</file>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/Cajero.java</file>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/TarjetaDebito.java</file>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/Transaccion.java</file>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/Cliente.java</file>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/Cuenta.java</file>
-            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/cajero/GUI.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Vista/Operacion.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Logica/Cajero.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Logica/Cuenta.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Vista/Inicial.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Vista/Valor.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Logica/Banco.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Logica/TarjetaDebito.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Logica/Transaccion.java</file>
+            <file>file:/C:/Users/LENOVO/Documents/NetBeansProjects/Cajero/src/Logica/Cliente.java</file>
         </group>
     </open-files>
 </project-private>

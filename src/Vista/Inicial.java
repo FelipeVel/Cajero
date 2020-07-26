@@ -42,16 +42,16 @@ public class Inicial extends JFrame implements ActionListener{
     }
     
     public static void main (String[] args){
-        Inicial i=new Inicial();
+        new Inicial();
     }
 
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e){
         if(e.getSource()==ingresar){
             try {
+                this.setVisible(false);
                 System.out.println("Ingresando");
                 Cliente cliente = new Cliente(nombre.getText());
-                this.setVisible(false);
                 new Operacion(cliente);
             } catch (SQLException ex) {
                 System.out.println("No se pudo ingresar: "+ex);

@@ -14,9 +14,11 @@ public class Operacion extends JFrame implements ActionListener{
     JButton consignar = new JButton("Consignar");
     JButton retirar = new JButton("Retirar");
     JButton volver = new JButton("Volver");
+    Cliente cliente;
     
     public Operacion(Cliente cliente){
         super("Seleccionar operacion");
+        this.cliente=cliente;
         this.setSize(700, 500);
         this.setLocationRelativeTo(null);
         cp = new JPanel();
@@ -52,6 +54,17 @@ public class Operacion extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(e.getSource()==retirar){
+            new Valor(cliente,"retirar");
+            this.setVisible(false);
+        }
+        if(e.getSource()==consignar){
+            new Valor(cliente,"consignar");
+            this.setVisible(false);
+        }
+        if(e.getSource()==volver){
+            new Inicial();
+            this.setVisible(false);
+        }
     }
 }

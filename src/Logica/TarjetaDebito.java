@@ -9,14 +9,15 @@ public class TarjetaDebito {
         private Cajero m_Cajero;
         private Cuenta cuenta;
 
-	public TarjetaDebito(String SerialTarjeta, String contraseña, Cajero cajero, Cuenta cuenta){
-            System.out.println("Serial: "+SerialTarjeta);
-            System.out.println("Contraseña: "+contraseña);
+	public TarjetaDebito(String SerialTarjeta, String contraseña, Cajero cajero){
             this.contraseña=contraseña;
             this.SerialTarjeta=SerialTarjeta;
             this.m_Cajero=cajero;
-            this.cuenta=cuenta;
 	}
+        
+        public void setCuenta(Cuenta cuenta){
+            this.cuenta=cuenta;
+        }
         
         public String getSerial(){
             return SerialTarjeta;
