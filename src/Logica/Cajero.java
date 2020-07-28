@@ -67,13 +67,17 @@ public class Cajero {
     public boolean solicitarTransaccion(int valor) {
         boolean saldo = validarSaldoCajero(valor);
         boolean capacidad = validarCapacidadCajero(valor);
+        boolean maximo=true;
         if (!saldo) {
             JOptionPane.showMessageDialog(null, "Saldo de cajero insuficiente", "Error", 0);
         }
         if(!capacidad){
             JOptionPane.showMessageDialog(null, "Capacidad del cajero insuficiente", "Error", 0);            
         }
-        return saldo && capacidad && tarjeta.getCuenta().aprobarTransaccion(valor);
+        if(valor<0){
+            maximo = banco.validaMaximoRetiro(cuenta.getId(),valor);
+        }
+        return maximo && saldo && capacidad && tarjeta.getCuenta().aprobarTransaccion(valor);
     }
 
     public void imprimirRecibo(Transaccion transaccion, Cliente cliente, Banco banco) {
@@ -95,6 +99,7 @@ public class Cajero {
     public void realizarTransaccion(Transaccion transaccion) {
         int valor = cuenta.getSaldo() + transaccion.getValor();
         banco.actualizarSaldoCuenta(cuenta.getId(), valor);
+        banco.actualizarFechaYValor(cuenta.getId(),transaccion.getValor());
         cuenta.actualizarDinero(transaccion.getValor());
         saldoCajero += transaccion.getValor();
         imprimirRecibo(transaccion, cliente, banco);

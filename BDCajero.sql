@@ -60,6 +60,8 @@ CREATE TABLE `cuenta` (
   `Saldo` int NOT NULL,
   `TarjetaValida` tinyint(1) NOT NULL,
   `SerialTarjeta` varchar(45) NOT NULL,
+  `FechaUltRetiro` date DEFAULT NULL,
+  `CantidadUltRetiro` int DEFAULT NULL,
   PRIMARY KEY (`idcuenta`),
   UNIQUE KEY `idCuenta_UNIQUE` (`idcuenta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -71,7 +73,7 @@ CREATE TABLE `cuenta` (
 
 LOCK TABLES `cuenta` WRITE;
 /*!40000 ALTER TABLE `cuenta` DISABLE KEYS */;
-INSERT INTO `cuenta` VALUES (1,1500000,1,'4a6'),(2,3000000,1,'7o9'),(3,750000,1,'9i7'),(4,150000,0,'5l1');
+INSERT INTO `cuenta` VALUES (1,3500000,1,'4a6','2020-07-28',505000),(2,3000000,1,'7o9','2020-06-20',1000000),(3,750000,1,'9i7','2020-07-26',10000),(4,150000,0,'5l1','2020-07-10',500000);
 /*!40000 ALTER TABLE `cuenta` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -84,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-26  2:07:53
+-- Dump completed on 2020-07-28  0:38:54

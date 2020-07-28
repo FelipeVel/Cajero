@@ -1,6 +1,7 @@
 package Logica;
 
 import java.sql.*;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 public class Banco {
@@ -9,6 +10,7 @@ public class Banco {
     public Cajero m_Cajero;
     public Cuenta m_Cuenta;
     private final String nombreBanco = "Banco UD";
+    private int maxDiario=1000000;
 
     private static Connection con;
     private static final String driver = "com.mysql.cj.jdbc.Driver";
@@ -40,6 +42,48 @@ public class Banco {
             }
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error de conexion: " + e);
+        }
+    }
+    
+    public boolean validaMaximoRetiro(String id, int valor){
+        try {
+            ResultSet rs = consulta(id,"cuenta");
+            rs.next();
+            Date ultOperacion = rs.getDate("FechaUltRetiro");
+            if(ultOperacion.compareTo(Date.valueOf(LocalDate.now()))!=0){
+                return true;
+            }
+            else{
+                int cantidad = rs.getInt("cantidadUltRetiro");
+                if(cantidad+Math.abs(valor)>=maxDiario){              
+                    JOptionPane.showMessageDialog(null, "Cantidad maxima superada", "Error", 0);
+                    return false;
+                }
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al validar la cantidad máxima de retiro: "+e);
+        }
+        return true;
+    }
+    
+    public void actualizarFechaYValor(String id, int valor){
+        try{
+            ResultSet rs = consulta(id,"cuenta");
+            rs.next();
+            Date ultOperacion = rs.getDate("FechaUltRetiro");
+            if(ultOperacion.compareTo(Date.valueOf(LocalDate.now()))==0){
+                s = (Statement) con.createStatement();
+                System.out.println("Suma: "+rs.getInt("CantidadUltRetiro")+"+"+Math.abs(valor)+"="+(rs.getInt("CantidadUltRetiro")+Math.abs(valor)));
+                s.executeUpdate("UPDATE cuenta SET CantidadUltRetiro=" + (rs.getInt("CantidadUltRetiro")+Math.abs(valor)) + " WHERE idcuenta=" + id);              
+            }
+            else{                
+                s = (Statement) con.createStatement();
+                s.executeUpdate("UPDATE cuenta SET FechaUltRetiro='" + Date.valueOf(LocalDate.now()) + "' WHERE idcuenta=" + id);
+                s.executeUpdate("UPDATE cuenta SET CantidadUltRetiro=" + Math.abs(valor) + " WHERE idcuenta=" + id);  
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar la cantidad de retiro diaria: "+e);
         }
     }
 

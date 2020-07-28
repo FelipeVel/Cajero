@@ -1,0 +1,7 @@
+Banco UD
+Sucursal: Principal
+Fecha: Tue Jul 28 00:31:25 COT 2020
+
+Cliente: Harrison Felipe Velandia Pinto
+Operacion: retirar
+Valor: 500000
