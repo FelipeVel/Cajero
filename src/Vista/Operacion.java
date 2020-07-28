@@ -13,7 +13,7 @@ public class Operacion extends JFrame implements ActionListener{
     JLabel bienvenida = new JLabel("Bienvenido/a, ");
     JButton consignar = new JButton("Consignar");
     JButton retirar = new JButton("Retirar");
-    JButton volver = new JButton("Volver");
+    JButton salir = new JButton("Salir");
     Cliente cliente;
     
     public Operacion(Cliente cliente){
@@ -44,10 +44,10 @@ public class Operacion extends JFrame implements ActionListener{
         cp.add(retirar);
         retirar.addActionListener(this);
         
-        volver.setBounds(480,10,200,30);
-        volver.setBackground(new Color(255,255,43));
-        cp.add(volver);
-        volver.addActionListener(this);
+        salir.setBounds(480,10,200,30);
+        salir.setBackground(new Color(255,255,43));
+        cp.add(salir);
+        salir.addActionListener(this);
         
         this.setVisible(true);
     }
@@ -62,8 +62,8 @@ public class Operacion extends JFrame implements ActionListener{
             new Valor(cliente,"consignar");
             this.setVisible(false);
         }
-        if(e.getSource()==volver){
-            new Inicial();
+        if(e.getSource()==salir){
+            new Inicial(cliente.getCajero());
             this.setVisible(false);
         }
     }

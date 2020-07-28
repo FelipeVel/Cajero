@@ -36,6 +36,5 @@ public class TarjetaDebito {
                 JOptionPane.showMessageDialog(null, "Serial invalido", "Error", 0);
                 System.exit(0);
             }
-            System.out.println("Serial valido");
         }
 }//end TarjetaDebito

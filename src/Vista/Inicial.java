@@ -1,5 +1,6 @@
 package Vista;
 
+import Logica.Cajero;
 import Logica.Cliente;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -12,9 +13,21 @@ public class Inicial extends JFrame implements ActionListener{
     JLabel l1 = new JLabel("Bienvenido, ingrese el nombre de la tarjeta:", SwingConstants.CENTER);
     JTextField nombre = new JTextField();
     JButton ingresar = new JButton("Ingresar");
+    Cajero cajero;
     
     public Inicial() throws HeadlessException {
         super("Ingresar tarjeta");
+        this.initComp();
+    }
+    
+    public Inicial(Cajero cajero) throws HeadlessException {
+        super("Ingresar tarjeta");
+        this.initComp();
+        this.cajero=cajero;
+    }
+    
+    private void initComp(){
+        cajero=null;
         this.setSize(700, 200);
         this.setLocationRelativeTo(null);
         cp = new JPanel();
@@ -38,7 +51,7 @@ public class Inicial extends JFrame implements ActionListener{
         cp.add(ingresar);
         ingresar.addActionListener(this);
         
-        this.setVisible(true);        
+        this.setVisible(true);          
     }
     
     public static void main (String[] args){
@@ -52,6 +65,11 @@ public class Inicial extends JFrame implements ActionListener{
                 this.setVisible(false);
                 System.out.println("Ingresando");
                 Cliente cliente = new Cliente(nombre.getText());
+                if(this.cajero!=null){
+                    cajero.setTarjeta(cliente.getTarjeta());
+                    cajero.setCuenta(cliente.getCuenta());
+                    cliente.setCajero(this.cajero);
+                }
                 new Operacion(cliente);
             } catch (SQLException ex) {
                 System.out.println("No se pudo ingresar: "+ex);

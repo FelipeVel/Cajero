@@ -17,11 +17,8 @@ public class Cliente {
 
 	public Cliente(String nombreTarjeta) throws SQLException{
             this.m_Cajero = new Cajero(this);
-            System.out.println("Cajero vinculado");
             crearTarjeta(nombreTarjeta);
-            System.out.println("Tarjeta local creada");
             m_Cajero.setTarjeta(tarjeta);
-            System.out.println("Tarjeta vinculada con cajero");
             ResultSet rs = m_Cajero.llenarCliente();
             rs.next();
             this.nombreCliente=rs.getString("Nombre");
@@ -33,8 +30,7 @@ public class Cliente {
             rs.next();
             this.cuenta=new Cuenta(rs.getString("idCuenta"),rs.getInt("saldo"),tarjeta);
             tarjeta.setCuenta(cuenta);
-            m_Cajero.setCuenta(cuenta);
-            System.out.println("Cliente local creado");
+            m_Cajero.setCuenta();
 	}
         
         public String getId(){
@@ -49,8 +45,20 @@ public class Cliente {
             return nombreCliente;
         }
         
+        public String getApellido(){
+            return apellidoCliente;
+        }
+        
         public Cajero getCajero(){
             return m_Cajero;
+        }
+        
+        public TarjetaDebito getTarjeta(){
+            return tarjeta;
+        }
+        
+        public void setCajero(Cajero cajero){
+            this.m_Cajero=cajero;
         }
         
         private void crearTarjeta(String nombreTarjeta){

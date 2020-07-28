@@ -22,27 +22,20 @@ public class Transaccion {
             return valorTransaccion;
         }
         
-        public void ejecutarTransaccion(){
-            if (tipoTransaccion.equals("consignar"))
-                ingresarDinero();
-            else if(tipoTransaccion.equals("retirar"))
-                retirarDinero();
-            if(!m_Cajero.solicitarTransaccion(valorTransaccion)){
-                JOptionPane.showMessageDialog(null, "Saldo insuficiente", "Error", 0);
-                return;
-            }                
-            System.out.println("Valor de transaccion: "+valorTransaccion);
-            m_Cajero.realizarTransaccion(this);
+        public String getOperacion(){
+            return tipoTransaccion;
         }
         
-	private void ingresarDinero(){
-            if(m_Cajero.solicitarTransaccion(valorTransaccion))
-                m_Cajero.actualizarSaldo(valorTransaccion);
-	}
-
-	private void retirarDinero(){
-            valorTransaccion*=-1;
-            if(m_Cajero.solicitarTransaccion(valorTransaccion))
-                m_Cajero.actualizarSaldo(valorTransaccion);
-	}
+        public String getFecha(){
+            return fechaTransaccion;
+        }
+        
+        public void ejecutarTransaccion(){
+            if(tipoTransaccion.equals("retirar"))
+                valorTransaccion*=-1;
+            if(!m_Cajero.solicitarTransaccion(valorTransaccion)){
+                return;
+            }
+            m_Cajero.realizarTransaccion(this);
+        }
 }//end Transaccion

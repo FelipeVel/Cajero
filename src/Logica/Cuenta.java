@@ -1,5 +1,7 @@
 package Logica;
 
+import javax.swing.JOptionPane;
+
 public class Cuenta {
 
 	private String idCuenta;
@@ -26,8 +28,10 @@ public class Cuenta {
 	}
 
 	public boolean aprobarTransaccion(int valor){
-            System.out.println("-Valor: "+(-valor)+" <= "+saldoCuenta+": "+(-valor <= saldoCuenta));
-            return -valor <= saldoCuenta;
+            boolean aprobacion = -valor <= saldoCuenta;
+            if(!aprobacion)
+                JOptionPane.showMessageDialog(null, "Saldo de cuenta insuficiente", "Error", 0);
+            return aprobacion;
 	}
 
 	public boolean validarEstadoCuenta(Banco banco){

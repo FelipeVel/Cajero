@@ -1,7 +1,6 @@
 package Vista;
 
 import Logica.Cliente;
-import Logica.Transaccion;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,46 +66,28 @@ public class Valor extends JFrame implements ActionListener{
             new Operacion(cliente);
         }
         if(e.getSource()==valores[0]){
-            //this.setVisible(false);
-            cliente.seleccionarOperacion(operacion, 10000);
-            //ventana de clave
             this.setVisible(false);
-            new Operacion(cliente);
+            new Clave(cliente,operacion,10000);
         }
         if(e.getSource()==valores[1]){
-            //this.setVisible(false);
-            cliente.seleccionarOperacion(operacion, 25000);
-            //ventana de clave
             this.setVisible(false);
-            new Operacion(cliente);
+            new Clave(cliente,operacion,25000);
         }
         if(e.getSource()==valores[2]){
-            //this.setVisible(false);
-            cliente.seleccionarOperacion(operacion, 50000);
-            //ventana de clave
             this.setVisible(false);
-            new Operacion(cliente);
+            new Clave(cliente,operacion,50000);
         }
         if(e.getSource()==valores[3]){
-            //this.setVisible(false);
-            cliente.seleccionarOperacion(operacion, 100000);
-            //ventana de clave
             this.setVisible(false);
-            new Operacion(cliente);
+            new Clave(cliente,operacion,100000);
         }
         if(e.getSource()==valores[4]){
-            //this.setVisible(false);
-            cliente.seleccionarOperacion(operacion, 500000);
-            //ventana de clave
             this.setVisible(false);
-            new Operacion(cliente);
+            new Clave(cliente,operacion,500000);
         }
         if(e.getSource()==valores[5]){
-            //this.setVisible(false);
-            cliente.seleccionarOperacion(operacion, 1000000);
-            //ventana de clave
             this.setVisible(false);
-            new Operacion(cliente);
+            new Clave(cliente,operacion,1000000);
         }
     }
     
