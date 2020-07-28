@@ -96,6 +96,6 @@ public class Cliente {
         }
         
         public boolean ingresarClave(String clave){
-            return m_Cajero.ingresarClave(clave);
+            return m_Cajero.validarClave(clave);
         }
 }//end Cliente

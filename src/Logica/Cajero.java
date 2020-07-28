@@ -7,13 +7,12 @@ import javax.swing.JOptionPane;
 public class Cajero {
 
     private int capacidadDesignada = 5000000;
-    private String idCajero;
     private int saldoCajero = 3500000;
     private TarjetaDebito tarjeta;
-    Banco banco;
-    int contador = 0;
-    Cliente cliente;
-    Cuenta cuenta;
+    private Banco banco;
+    private int contador = 0;
+    private Cliente cliente;
+    private Cuenta cuenta;
     private String sucursal = "Principal";
 
     public Cajero(Cliente cliente) throws SQLException {
@@ -47,7 +46,7 @@ public class Cajero {
         return banco.llenarCuenta();
     }
 
-    public boolean ingresarClave(String clave) {
+    public boolean validarClave(String clave) {
         if (!(clave.equals(tarjeta.getClave())) && contador < 2) {
             contador++;
             System.out.println("Intentos fallidos: " + contador);
@@ -77,11 +76,7 @@ public class Cajero {
         return saldo && capacidad && tarjeta.getCuenta().aprobarTransaccion(valor);
     }
 
-    public String getId() {
-        return idCajero;
-    }
-
-    public void imprimirReciboTransaccion(Transaccion transaccion, Cliente cliente, Banco banco) {
+    public void imprimirRecibo(Transaccion transaccion, Cliente cliente, Banco banco) {
         try {
             PrintWriter writer = new PrintWriter("C:\\Users\\LENOVO\\Documents\\NetBeansProjects\\Cajero\\src\\Logica\\Recursos\\Recibo.txt", "UTF-8");
             writer.println(banco.getNombre());
@@ -102,7 +97,7 @@ public class Cajero {
         banco.actualizarSaldoCuenta(cuenta.getId(), valor);
         cuenta.actualizarDinero(transaccion.getValor());
         saldoCajero += transaccion.getValor();
-        imprimirReciboTransaccion(transaccion, cliente, banco);
+        imprimirRecibo(transaccion, cliente, banco);
     }
 
     public boolean validarSaldoCajero(int valor) {

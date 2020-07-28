@@ -1,7 +1,6 @@
 package Logica;
 
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 public class Transaccion {
 
