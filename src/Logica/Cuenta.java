@@ -9,10 +9,11 @@ public class Cuenta {
 	public TarjetaDebito m_TarjetaDebito;
 	private int saldoCuenta;
 
-	public Cuenta(String idCuenta, int saldo, TarjetaDebito tarjeta){
+	public Cuenta(String idCuenta, int saldo, TarjetaDebito tarjeta, Cliente cliente){
             this.idCuenta=idCuenta;
             this.saldoCuenta=saldo;
             this.m_TarjetaDebito=tarjeta;
+            this.m_Cliente=cliente;
 	}
         
         public String getId(){
@@ -21,6 +22,10 @@ public class Cuenta {
         
         public int getSaldo(){
             return saldoCuenta;
+        }
+        
+        public Cliente getCliente(){
+            return m_Cliente;
         }
 
 	public void actualizarDinero(int valor){

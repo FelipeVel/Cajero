@@ -35,7 +35,7 @@ public class Inicial extends JFrame implements ActionListener{
         this.setContentPane(cp);
         cp.setLayout(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        cp.setBackground(new Color(255,22,22));
+        cp.setBackground(new Color(165, 234, 70));
         
         l1.setBounds(0, 30, 700, 30);
         l1.setFont(new Font(Font.SANS_SERIF, Font.ROMAN_BASELINE, 20));
@@ -47,7 +47,7 @@ public class Inicial extends JFrame implements ActionListener{
         
         ingresar.setBounds(250,110,150,30);
         ingresar.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-        ingresar.setBackground(new Color(255,255,43));
+        ingresar.setBackground(Color.WHITE);
         cp.add(ingresar);
         ingresar.addActionListener(this);
         
@@ -64,13 +64,15 @@ public class Inicial extends JFrame implements ActionListener{
             try {
                 this.setVisible(false);
                 System.out.println("Ingresando");
-                Cliente cliente = new Cliente(nombre.getText());
-                if(this.cajero!=null){
-                    cajero.setTarjeta(cliente.getTarjeta());
-                    cajero.setCuenta(cliente.getCuenta());
-                    cliente.setCajero(this.cajero);
+                Cliente cliente=null;
+                if(this.cajero==null){
+                    cliente = new Cliente(nombre.getText());
                 }
-                new Operacion(cliente);
+                else{
+                    cliente = new Cliente(nombre.getText(),cajero);
+                }
+                if (cliente.getCajero().validarSerial())
+                    new Operacion(cliente);
             } catch (SQLException ex) {
                 System.out.println("No se pudo ingresar: "+ex);
             }

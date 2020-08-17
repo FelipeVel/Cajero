@@ -17,10 +17,22 @@ public class Cliente {
 
 	public Cliente(String nombreTarjeta) throws SQLException{
             this.m_Cajero = new Cajero(this);
+            initComp(nombreTarjeta);
+            System.out.println("Saldo del cajero: "+m_Cajero.getSaldo());
+	}
+        
+	public Cliente(String nombreTarjeta, Cajero cajero) throws SQLException{
+            this.m_Cajero=cajero;
+            m_Cajero.setCliente(this);
+            initComp(nombreTarjeta);
+            System.out.println("Saldo del cajero: "+m_Cajero.getSaldo());
+	}
+        
+        private void initComp(String nombreTarjeta) throws SQLException{
             crearTarjeta(nombreTarjeta);
-            m_Cajero.setTarjeta(tarjeta);
-            ResultSet rs = m_Cajero.llenarCliente();
-            rs.next();
+            ResultSet rs = m_Cajero.llenarCliente(tarjeta.getSerial());
+            this.idCliente=rs.getString("idcliente");
+            System.out.println(idCliente);
             this.nombreCliente=rs.getString("Nombre");
             this.apellidoCliente=rs.getString("Apellido");
             this.direccionCliente=rs.getString("Direccion");
@@ -28,10 +40,11 @@ public class Cliente {
             this.cedula=rs.getString("Cedula");
             rs=m_Cajero.llenarCuenta();
             rs.next();
-            this.cuenta=new Cuenta(rs.getString("idCuenta"),rs.getInt("saldo"),tarjeta);
+            this.cuenta=new Cuenta(rs.getString("idCuenta"),rs.getInt("saldo"),tarjeta,this);
             tarjeta.setCuenta(cuenta);
             m_Cajero.setCuenta();
-	}
+            m_Cajero.setTarjeta(tarjeta);            
+        }
         
         public String getId(){
             return idCliente;
@@ -57,16 +70,12 @@ public class Cliente {
             return tarjeta;
         }
         
-        public void setCajero(Cajero cajero){
-            this.m_Cajero=cajero;
-        }
-        
         private void crearTarjeta(String nombreTarjeta){
             System.out.println("Asociando tarjeta");
             BufferedReader br = null;
             try {
                br = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\NetBeansProjects\\Cajero\\src\\Logica\\Recursos\\"+nombreTarjeta+".txt"));
-               this.idCliente = br.readLine();
+               //this.idCliente = br.readLine();
                String serial = br.readLine();
                String clave = br.readLine();
                this.tarjeta= new TarjetaDebito(serial,clave,m_Cajero);
@@ -91,8 +100,9 @@ public class Cliente {
             }
         }
         
-        public void seleccionarOperacion(String operacion, int valor){
-            new Transaccion(operacion,valor,m_Cajero);
+        public boolean seleccionarOperacion(String operacion, int valor){
+            Transaccion t = new Transaccion(operacion,valor,m_Cajero);
+            return t.ejecutarTransaccion();
         }
         
         public boolean ingresarClave(String clave){

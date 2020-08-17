@@ -1,5 +1,6 @@
 package Logica;
 
+import Vista.*;
 import java.sql.*;
 import java.io.PrintWriter;
 import javax.swing.JOptionPane;
@@ -23,11 +24,22 @@ public class Cajero {
     public Cliente getCliente() {
         return cliente;
     }
+    
+    public void setCliente(Cliente cliente){
+        this.cliente=cliente;
+    }
+    
+    public int getContador(){
+        return this.contador;
+    }
 
     public void setTarjeta(TarjetaDebito tarjeta) {
         this.tarjeta = tarjeta;
-        banco.setClienteId(cliente.getId());
-        tarjeta.validarSerial();
+        this.cliente = tarjeta.getCliente();
+        if(tarjeta.validarSerial())
+            banco.setClienteId(cliente.getId());
+        else
+            new Inicial(this);
     }
 
     public void setCuenta() {
@@ -37,9 +49,13 @@ public class Cajero {
     public void setCuenta(Cuenta cuenta) {
         this.cuenta = cuenta;
     }
+    
+    public int getSaldo(){
+        return saldoCajero;
+    }
 
-    public ResultSet llenarCliente() {
-        return banco.llenarCliente();
+    public ResultSet llenarCliente(String serial) {
+        return banco.llenarCliente(serial);
     }
 
     public ResultSet llenarCuenta() {
@@ -54,30 +70,33 @@ public class Cajero {
         } else if (clave.equals(tarjeta.getClave())) {
             return true;
         } else if (contador >= 2) {
+            contador++;
             banco.bloquearTarjeta(cuenta.getId());
-            System.exit(0);
+            new Inicial(this);
         }
         return false;
     }
 
     public boolean validarSerial() {
-        return banco.validarSerialTarjeta(cliente.getId(), tarjeta.getSerial());
+        return banco.validarSerialTarjeta(cuenta.getId(), tarjeta.getSerial());
     }
 
     public boolean solicitarTransaccion(int valor) {
-        boolean saldo = validarSaldoCajero(valor);
-        boolean capacidad = validarCapacidadCajero(valor);
+        boolean saldoCuenta = tarjeta.getCuenta().aprobarTransaccion(valor);
         boolean maximo=true;
+        boolean capacidad = validarCapacidadCajero(valor);
+        if(!capacidad){
+            JOptionPane.showMessageDialog(null, "Capacidad del cajero insuficiente", "Error", 0);    
+            new Operacion(cliente);        
+        }
+        else if(valor<0){
+            maximo = banco.validaMaximoRetiro(cuenta.getId(),valor);
+        }
+        boolean saldo = validarSaldoCajero(valor);
         if (!saldo) {
             JOptionPane.showMessageDialog(null, "Saldo de cajero insuficiente", "Error", 0);
         }
-        if(!capacidad){
-            JOptionPane.showMessageDialog(null, "Capacidad del cajero insuficiente", "Error", 0);            
-        }
-        if(valor<0){
-            maximo = banco.validaMaximoRetiro(cuenta.getId(),valor);
-        }
-        return maximo && saldo && capacidad && tarjeta.getCuenta().aprobarTransaccion(valor);
+        return maximo && saldo && capacidad && saldoCuenta;
     }
 
     public void imprimirRecibo(Transaccion transaccion, Cliente cliente, Banco banco) {
@@ -98,18 +117,49 @@ public class Cajero {
 
     public void realizarTransaccion(Transaccion transaccion) {
         int valor = cuenta.getSaldo() + transaccion.getValor();
+        String[] recibos = {"Impreso","En pantalla"};
         banco.actualizarSaldoCuenta(cuenta.getId(), valor);
-        banco.actualizarFechaYValor(cuenta.getId(),transaccion.getValor());
+        if(transaccion.getValor()<0)
+            banco.actualizarFechaYValor(cuenta.getId(),transaccion.getValor());
         cuenta.actualizarDinero(transaccion.getValor());
         saldoCajero += transaccion.getValor();
-        imprimirRecibo(transaccion, cliente, banco);
+        String seleccion = (String) JOptionPane.showInputDialog(null,
+                "¿De que forma quiere ver su recibo?",
+                "Recibo",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                recibos,
+                recibos[0]);
+        if(seleccion.equals("Impreso")){
+            imprimirRecibo(transaccion, cliente, banco);
+        }
+        else if(seleccion.equals("En pantalla")){
+            new Recibo(transaccion, cliente, banco);
+        }
+        JOptionPane.showMessageDialog(null, "Operacion realizada", "Hecho", 3);
     }
 
     public boolean validarSaldoCajero(int valor) {
-        return saldoCajero + valor > (capacidadDesignada * 0.1);
+        boolean validacion=saldoCajero + valor > (capacidadDesignada * 0.1);
+        if(!validacion)
+            new Operador(this);
+        return validacion;
     }
     
     public boolean validarCapacidadCajero(int valor){
         return saldoCajero + valor < capacidadDesignada;
+    }
+    
+    public boolean recargar(int recarga){
+        if(saldoCajero+recarga<=capacidadDesignada){
+            this.saldoCajero+=recarga;
+            JOptionPane.showMessageDialog(null, "Recarga realizada\nNuevo saldo: "+saldoCajero, "Hecho", 3);
+            new Inicial(this);
+            return true;
+        }
+        else{            
+            JOptionPane.showMessageDialog(null, "El valor supera la capacidad maxima de "+capacidadDesignada, "Error", 0);
+        }
+        return false;
     }
 }//end Cajero

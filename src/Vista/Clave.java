@@ -12,7 +12,7 @@ import javax.swing.SwingConstants;
 public class Clave extends JFrame implements ActionListener {
     
     Cliente cliente;
-    String operacion;
+    String operacion=null;
     int valor;
     JPanel cp;
     JLabel l1 = new JLabel("Ingrese la contraseña de la tarjeta:", SwingConstants.CENTER);
@@ -23,7 +23,17 @@ public class Clave extends JFrame implements ActionListener {
         super("Ingrese la clave");
         this.cliente=cliente;
         this.operacion=operacion;
-        this.valor=valor;
+        this.valor=valor; 
+        initComp();
+    }  
+    
+    public Clave(Cliente cliente){
+        super("Ingrese la clave");
+        this.cliente=cliente;
+        initComp();
+    } 
+    
+    private void initComp(){
         this.setSize(700, 200);
         this.setLocationRelativeTo(null);
         cp = new JPanel();
@@ -31,7 +41,7 @@ public class Clave extends JFrame implements ActionListener {
         this.setContentPane(cp);
         cp.setLayout(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        cp.setBackground(new Color(255,22,22));
+        cp.setBackground(new Color(165, 234, 70));
         
         l1.setBounds(0, 30, 700, 30);
         l1.setFont(new Font(Font.SANS_SERIF, Font.ROMAN_BASELINE, 20));
@@ -43,24 +53,31 @@ public class Clave extends JFrame implements ActionListener {
         
         ingresar.setBounds(250,110,150,30);
         ingresar.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-        ingresar.setBackground(new Color(255,255,43));
+        ingresar.setBackground(Color.WHITE);
         cp.add(ingresar);
         ingresar.addActionListener(this);
         
-        this.setVisible(true);  
-    }  
-    
+        this.setVisible(true);        
+    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==ingresar){
-            if(cliente.ingresarClave(clave.getText())){                
-                cliente.seleccionarOperacion(operacion, valor);
+            if(cliente.ingresarClave(clave.getText())){
                 this.setVisible(false);
-                new Operacion(cliente);
+                if(operacion==null){
+                    new Consulta(cliente);
+                    this.setVisible(false);
+                }
+                else if(cliente.seleccionarOperacion(operacion, valor))
+                    new Operacion(cliente);
+            }
+            else if(cliente.getCajero().getContador()<=2){
+                JOptionPane.showMessageDialog(null, "Clave incorrecta", "Error", 0);
+                clave.setText("");
             }
             else{
-                clave.setText("");
+                this.setVisible(false);
             }
         }
     }

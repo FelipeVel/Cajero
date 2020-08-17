@@ -8,9 +8,8 @@ public class Banco {
 
     private String idCliente;
     public Cajero m_Cajero;
-    public Cuenta m_Cuenta;
     private final String nombreBanco = "Banco UD";
-    private int maxDiario=1000000;
+    private int maxDiario=2000000;
 
     private static Connection con;
     private static final String driver = "com.mysql.cj.jdbc.Driver";
@@ -74,7 +73,6 @@ public class Banco {
             Date ultOperacion = rs.getDate("FechaUltRetiro");
             if(ultOperacion.compareTo(Date.valueOf(LocalDate.now()))==0){
                 s = (Statement) con.createStatement();
-                System.out.println("Suma: "+rs.getInt("CantidadUltRetiro")+"+"+Math.abs(valor)+"="+(rs.getInt("CantidadUltRetiro")+Math.abs(valor)));
                 s.executeUpdate("UPDATE cuenta SET CantidadUltRetiro=" + (rs.getInt("CantidadUltRetiro")+Math.abs(valor)) + " WHERE idcuenta=" + id);              
             }
             else{                
@@ -107,8 +105,20 @@ public class Banco {
         }
     }
 
-    public ResultSet llenarCliente() {
-        return consulta(idCliente, "cliente");
+    public ResultSet llenarCliente(String serial) {
+        ResultSet cuenta;
+        ResultSet cliente=null;
+        try {
+            s = (Statement) con.createStatement();
+            cuenta = s.executeQuery("SELECT * FROM cuenta WHERE SerialTarjeta='" + serial + "'");
+            cuenta.next();
+            cliente = s.executeQuery("SELECT * FROM cliente WHERE idcuenta='" + cuenta.getString("idcuenta") + "'");
+            cliente.next();
+            this.idCliente=cliente.getString("idcliente");
+        } catch (SQLException ex) {
+            System.out.println("Error llenando el cliente: " + ex);
+        }
+        return cliente;
     }
 
     public ResultSet llenarCuenta() {

@@ -14,7 +14,6 @@ public class Transaccion {
             this.valorTransaccion=valor;
             this.m_Cajero=m_Cajero;
             fechaTransaccion = new Date().toString();
-            this.ejecutarTransaccion();
 	}
         
         public int getValor(){
@@ -29,12 +28,13 @@ public class Transaccion {
             return fechaTransaccion;
         }
         
-        public void ejecutarTransaccion(){
+        public boolean ejecutarTransaccion(){
             if(tipoTransaccion.equals("retirar"))
-                valorTransaccion*=-1;
+                valorTransaccion*=(-1);
             if(!m_Cajero.solicitarTransaccion(valorTransaccion)){
-                return;
+                return false;
             }
             m_Cajero.realizarTransaccion(this);
+            return true;
         }
 }//end Transaccion

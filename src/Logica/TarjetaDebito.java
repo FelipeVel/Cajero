@@ -31,10 +31,15 @@ public class TarjetaDebito {
             return contraseña;
         }
         
-        public void validarSerial(){
-            if(m_Cajero.validarSerial()==false){
+        public Cliente getCliente(){
+            return cuenta.getCliente();
+        }
+        
+        public boolean validarSerial(){
+            boolean valido=m_Cajero.validarSerial();
+            if(valido==false){
                 JOptionPane.showMessageDialog(null, "Serial invalido", "Error", 0);
-                System.exit(0);
             }
+            return valido;
         }
 }//end TarjetaDebito
